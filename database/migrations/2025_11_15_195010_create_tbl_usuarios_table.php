@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('tblUsuarios', function (Blueprint $table) {
+            $table->id('id_usuario');
+            $table->string('nombre', 100);
+            $table->string('apellido', 100);
+            $table->string('documento', 50)->unique();
+            $table->string('correo', 150)->unique();
+            $table->string('contraseña', 255);
+            $table->string('teléfono', 20)->nullable();
+            $table->string('dirección', 255)->nullable();
+            $table->string('rol', 50); //crear tabla de rol en caso de ser necesario
+            $table->boolean('estado')->default(1);
+            $table->timestamp('fecha_registro')->useCuerrent();
+            $table->date('fecha_nacimiento');
+            $table->softDeletes();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('tblUsuarios');
+    }
+};
