@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RequestUsuario;
 use App\Services\UsuarioService;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class UsuarioController extends Controller
 {
@@ -21,7 +21,7 @@ class UsuarioController extends Controller
             $usuarios = $this->usuarioService->obtenerUsuarios();
 
             return response()->json(['data' => $usuarios], 200);
-        } catch (\Eception $e) {
+        } catch (\Exception $e) {
             return response()->json(['error' => 'Error al obtener usuarios', 'message' => $e->getMessage()], 500);
         }
     }
