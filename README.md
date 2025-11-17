@@ -238,4 +238,4 @@ Ejemplo
 ```bash
 php artisan make:request RequestProducto
 ```
->>>>>>> a4b509c0b8dba03b746b4cba3c2ed840014f5aaa
+
