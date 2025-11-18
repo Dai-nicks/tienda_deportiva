@@ -78,4 +78,18 @@ class UsuarioController extends Controller
             return response()->json(['error' => 'Error al eliminar el usuario', 'message' => $e->getMessage()], 500);
         }
     }
+
+    public function restore(string $id): JsonResponse
+    {
+        try {
+            $restaurado = $this->usuarioService->restaurarUsuario((int) $id);
+            if (! $restaurado) {
+                return response()->json(['error' => 'Usuario no encontrado o no eliminado'], 404);
+            }
+
+            return response()->json(['message' => 'Usuario restaurado exitosamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al restaurar el usuario', 'message' => $e->getMessage()], 500);
+        }
+    }
 }

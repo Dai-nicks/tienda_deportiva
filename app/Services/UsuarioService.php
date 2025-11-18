@@ -53,4 +53,17 @@ class UsuarioService
 
         return true;
     }
+
+    public function restaurarUsuario($id): bool
+    {
+        $usuario = Usuario::withTrashed()->find($id);
+
+        if (! $usuario || ! $usuario->trashed()) {
+            return false;
+        }
+
+        $usuario->restore();
+
+        return true;
+    }
 }
