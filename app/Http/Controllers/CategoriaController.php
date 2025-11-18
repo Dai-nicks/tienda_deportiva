@@ -83,4 +83,19 @@ class CategoriaController extends Controller
         }
 
     }
+
+    public function restore(int $id): JsonResponse
+    {
+        try {
+            $restored = $this->categoriaService->restaurarCategoria($id);
+            if (! $restored) {
+                return response()->json(['message' => 'Categoría no encontrada o no eliminada'], 404);
+            }
+
+            return response()->json(['message' => 'Categoría restaurada correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al restaurar la categoría', 'message' => $e->getMessage()], 500);
+        }
+
+    }
 }
