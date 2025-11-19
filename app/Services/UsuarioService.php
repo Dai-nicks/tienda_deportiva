@@ -48,9 +48,9 @@ class UsuarioService
         if (! $usuario) {
             return null;
         }
-        $usuario->activo = false;
-        $usuario->save();
 
+        $usuario->delete();
+        
         return true;
     }
 
