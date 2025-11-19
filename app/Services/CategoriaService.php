@@ -41,8 +41,8 @@ class CategoriaService
         if (! $categoria) {
             return false;
         }
-        $categoria->activo = false;
-        $categoria->save();
+
+        $categoria->delete();
 
         return true;
     }
