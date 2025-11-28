@@ -11,7 +11,6 @@ use App\Http\Controllers\DetallePedidoController;
 use App\Http\Controllers\PagoController;
 use Illuminate\Support\Facades\Route;
 
-
 Route::apiResource('usuarios', UsuarioController::class);
 Route::apiResource('categorias', CategoriaController::class);
 Route::apiResource('productos', ProductoController::class);
