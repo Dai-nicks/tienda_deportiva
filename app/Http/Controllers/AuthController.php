@@ -3,34 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Usuario;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        // Validamos los campos
         $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
+            'correo' => 'required|email',
+            'contraseña' => 'required'
         ]);
 
-        // Tomamos las credenciales
-        $credentials = $request->only('email', 'password');
+        $usuario = Usuario::where('correo', $request->correo)->first();
 
-        // Verificamos si son correctas
-        if (!Auth::attempt($credentials)) {
-            return response()->json([
-                'message' => 'Credenciales incorrectas'
-            ], 401);
+        if (!$usuario) {
+            return response()->json(['message' => 'Correo no registrado'], 404);
         }
 
-        // Si son correctas, traemos el usuario
-        $user = Auth::user();
+        if (!Hash::check($request->contraseña, $usuario->contraseña)) {
+            return response()->json(['message' => 'Contraseña incorrecta'], 401);
+        }
+
+        $token = $usuario->createToken('api-token')->plainTextToken;
 
         return response()->json([
             'message' => 'Login exitoso',
-            'user' => $user
+            'usuario' => $usuario,
+            'token' => $token
         ]);
     }
 }
