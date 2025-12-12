@@ -8,6 +8,7 @@ return [
 
     'allowed_origins' => [
         'http://localhost:5173',  // Vite
+        'http://127.0.0.1:5173',  // Vite alternative (127.0.0.1)
         'http://localhost:3000',  // React normal
         'https://didactic-cod-r4677pjg9rr4fwpp4-5173.app.github.dev/'
     ],

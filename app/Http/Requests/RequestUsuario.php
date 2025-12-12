@@ -28,9 +28,9 @@ class RequestUsuario extends FormRequest
             'apellido' => ($isUpdate ? 'sometimes' : 'required').'|string|min:1|max:100',
             'documento' => ($isUpdate ? 'sometimes' : 'required').'|string|min:1|max:50|unique:tblUsuarios,documento',
             'correo' => ($isUpdate ? 'sometimes' : 'required').'|email|max:150|unique:tblUsuarios,correo',
-            'contraseña' => ($isUpdate ? 'nullable' : 'required').'|string|min:6',
-            'teléfono' => ($isUpdate ? 'sometimes' : 'nullable').'|string|max:20',
-            'dirección' => ($isUpdate ? 'sometimes' : 'nullable').'|string|max:255',
+            'contrasena' => ($isUpdate ? 'nullable' : 'required').'|string|min:6',
+            'telefono' => ($isUpdate ? 'sometimes' : 'nullable').'|string|max:20',
+            'direccion' => ($isUpdate ? 'sometimes' : 'nullable').'|string|max:255',
             'rol' => ($isUpdate ? 'sometimes' : 'required').'|string|max:50',
             'estado' => ($isUpdate ? 'sometimes' : 'nullable').'|boolean',
             'fecha_nacimiento' => ($isUpdate ? 'sometimes' : 'required').'|date',
@@ -55,12 +55,12 @@ class RequestUsuario extends FormRequest
             'correo.unique' => 'Este correo ya está registrado.',
             'correo.max' => 'El correo no debe exceder los 150 caracteres.',
 
-            'contraseña.required' => 'La contraseña es obligatoria.',
-            'contraseña.min' => 'La contraseña debe tener al menos 6 caracteres.',
+            'contrasena.required' => 'La contraseña es obligatoria.',
+            'contrasena.min' => 'La contraseña debe tener al menos 6 caracteres.',
 
-            'teléfono.max' => 'El teléfono no debe exceder los 20 caracteres.',
+            'telefono.max' => 'El teléfono no debe exceder los 20 caracteres.',
 
-            'dirección.max' => 'La dirección no debe exceder los 255 caracteres.',
+            'direccion.max' => 'La dirección no debe exceder los 255 caracteres.',
 
             'rol.required' => 'El rol es obligatorio.',
             'rol.max' => 'El rol no debe exceder los 50 caracteres.',

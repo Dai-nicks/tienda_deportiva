@@ -10,6 +10,7 @@ use App\Http\Controllers\DetalleCarritoController;
 use App\Http\Controllers\DetallePedidoController;
 use App\Http\Controllers\PagoController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 
 Route::apiResource('usuarios', UsuarioController::class);
@@ -21,3 +22,8 @@ Route::apiResource('detalles_carrito', DetalleCarritoController::class);
 Route::apiResource('detalles_pedido', DetallePedidoController::class);
 Route::apiResource('pagos', PagoController::class);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+	return $request->user();
+});

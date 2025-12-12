@@ -1,0 +1,85 @@
+{
+  "info": {
+    "_postman_id": "tiendaRopa-api-collection",
+    "name": "tiendaRopa-api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+                "body": { "mode": "raw", "raw": "{\n  \"correo\": \"usuario@example.com\",\n  \"contrasena\": \"password\"\n}" },
+        "url": { "raw": "{{base_url}}/api/login", "host": ["{{base_url}}"], "path": ["api","login"] }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar productos (público)",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{base_url}}/api/productos", "host": ["{{base_url}}"], "path": ["api","productos"] } },
+      "response": []
+    },
+    {
+      "name": "Listar carritos (protegido)",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" } ],
+        "url": { "raw": "{{base_url}}/api/carritos", "host": ["{{base_url}}"], "path": ["api","carritos"] }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear pedido (protegido)",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"carrito_id\": 1,\n  \"direccion\": \"Calle Falsa 123\"\n}" },
+        "url": { "raw": "{{base_url}}/api/pedidos", "host": ["{{base_url}}"], "path": ["api","pedidos"] }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar pedidos (protegido)",
+      "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ], "url": { "raw": "{{base_url}}/api/pedidos", "host": ["{{base_url}}"], "path": ["api","pedidos"] } },
+      "response": []
+    },
+    {
+      "name": "Crear pago (protegido)",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"pedido_id\": 1,\n  \"monto\": 100.00,\n  \"metodo\": \"tarjeta\"\n}" },
+        "url": { "raw": "{{base_url}}/api/pagos", "host": ["{{base_url}}"], "path": ["api","pagos"] }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar pagos (protegido)",
+      "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ], "url": { "raw": "{{base_url}}/api/pagos", "host": ["{{base_url}}"], "path": ["api","pagos"] } },
+      "response": []
+    },
+    {
+      "name": "Listar personalizaciones (protegido)",
+      "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ], "url": { "raw": "{{base_url}}/api/personalizaciones", "host": ["{{base_url}}"], "path": ["api","personalizaciones"] } },
+      "response": []
+    },
+    {
+      "name": "Listar usuarios (admin)",
+      "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ], "url": { "raw": "{{base_url}}/api/usuarios", "host": ["{{base_url}}"], "path": ["api","usuarios"] } },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}

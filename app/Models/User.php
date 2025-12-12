@@ -7,6 +7,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Schema;
 
 class User extends Authenticatable
 {
@@ -20,6 +21,11 @@ class User extends Authenticatable
      * @var string
      */
     protected $table = 'tblUsuarios';
+    // El nombre de la PK de la migración
+    protected $primaryKey = 'id_usuario';
+    public $incrementing = true;
+    protected $keyType = 'int';
+    public $timestamps = false; // La tabla usa fecha_registro
 
     /**
      * The attributes that are mass assignable.
@@ -27,11 +33,11 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'nombre',
         'correo',
-        'contraseña',
-        'teléfono',
-        'dirección',
+        'contrasena',
+        'telefono',
+        'direccion',
         'rol',
         'estado',
         'fecha_registro',
@@ -44,20 +50,45 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'contraseña',
+        'contrasena',
         'remember_token',
     ];
+
+    /**
+     * Accessor to read contrasena while supporting legacy column `contraseña`.
+     */
+    public function getContrasenaAttribute($value)
+    {
+        if (! empty($value)) {
+            return $value;
+        }
+
+        // Fallback to legacy 'contraseña' column
+        if (array_key_exists('contraseña', $this->attributes)) {
+            return $this->attributes['contraseña'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Mutator to write contrasena into the available column (contrasena or contraseña)
+     */
+    public function setContrasenaAttribute($value)
+    {
+        if (Schema::hasColumn($this->getTable(), 'contrasena')) {
+            $this->attributes['contrasena'] = $value;
+            return;
+        }
+        $this->attributes['contraseña'] = $value;
+    }
 
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'contraseña' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 }

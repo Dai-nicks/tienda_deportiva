@@ -14,12 +14,12 @@ return new class extends Migration
             $table->string('apellido', 100);
             $table->string('documento', 50)->unique();
             $table->string('correo', 150)->unique();
-            $table->string('contraseña', 255);
-            $table->string('teléfono', 20)->nullable();
-            $table->string('dirección', 255)->nullable();
+            $table->string('contrasena', 255);
+            $table->string('telefono', 20)->nullable();
+            $table->string('direccion', 255)->nullable();
             $table->string('rol', 50); //crear tabla de rol en caso de ser necesario
             $table->boolean('estado')->default(1);
-            $table->timestamp('fecha_registro')->useCuerrent();
+            $table->timestamp('fecha_registro')->useCurrent();
             $table->date('fecha_nacimiento');
             $table->softDeletes();
         });

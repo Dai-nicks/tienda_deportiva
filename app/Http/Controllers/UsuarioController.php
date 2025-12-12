@@ -12,7 +12,9 @@ class UsuarioController extends Controller
 
    public function __construct()
    {
-        $this->usuarioService = new UsuarioService();
+       $this->usuarioService = new UsuarioService();
+       // Protect routes with Sanctum; allow unauthenticated registration via store() if needed
+       $this->middleware('auth:sanctum')->except(['store']);
    }
 
     public function index(): JsonResponse

@@ -1,8 +1,9 @@
-<?php 
+<?php
 
 namespace App\Services;
 
 use App\Models\Usuario;
+use Illuminate\Support\Facades\Hash;
 
 class UsuarioService
 {
@@ -13,7 +14,7 @@ class UsuarioService
 
     public function crearUsuario(array $data)
     {
-        $data['contraseña'] = Hash::make($data['contraseña']);
+        $data['contrasena'] = Hash::make($data['contrasena']);
 
         return Usuario::create($data);
     }
@@ -30,10 +31,10 @@ class UsuarioService
             return null;
         }
 
-        if (! empty($data['contraseña'])) {
-            $data['contraseña'] = Hash::make($data['contraseña']);
+        if (! empty($data['contrasena'])) {
+            $data['contrasena'] = Hash::make($data['contrasena']);
         } else {
-            unset($data['contraseña']);
+            unset($data['contrasena']);
         }
 
         $usuario->update($data);
@@ -50,7 +51,7 @@ class UsuarioService
         }
 
         $usuario->delete();
-        
+
         return true;
     }
 

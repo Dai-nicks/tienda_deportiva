@@ -108,6 +108,47 @@ Ejecuta las migraciones para crear las tablas en la base de datos:
 php artisan migrate
 ```
 
+> Después de aplicar las migraciones, debe ejecutar el seeder de administrador y el comando para re-hashear contraseñas heredadas si procede:
+
+```bash
+php artisan db:seed --class=AdminUserSeeder
+php artisan rehash:passwords
+```
+
+Esto agregará un usuario administrativo con contraseña encriptada y convertirá contraseñas heredadas en texto plano al formato bcrypt compatible con Laravel.
+
+### Conectar el Frontend (Vite / React)
+
+Si vas a usar el frontend incluido (`Front-end-tienda-`) con Vite, asegúrate de lo siguiente:
+
+- En el proyecto frontend establece la variable de entorno `VITE_API_URL` apuntando a la URL base de la API (incluye `/api` si usas el prefijo):
+
+```
+VITE_API_URL=http://localhost:8000/api
+```
+
+- El servidor de desarrollo de Vite corre por defecto en `http://localhost:5173`. El backend ya tiene `http://localhost:5173` configurado en `config/cors.php`, pero si tu frontend corre en otro host/puerto añade ese origen a `allowed_origins`.
+
+- Para permitir que las peticiones incluyan el token y autenticación, el proyecto usa tokens Bearer (Sanctum en modo token). Asegúrate de haber ejecutado el seeder de administrador y de que las migraciones y seeders estén aplicados.
+
+Ejemplo rápido para levantar ambos servicios (desde dos terminales):
+
+```
+# Backend
+cd tiendaRopa-api
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+php artisan serve --port=8000
+
+# Frontend (en otra terminal)
+cd Front-end-tienda-
+npm install
+cp .env.example .env
+npm run dev
+```
+
 ## ¿Cómo colaborar?
 
 ### 1. Sincronizar las ramas con el repositorio remoto (GitHub)
