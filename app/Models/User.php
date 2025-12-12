@@ -3,7 +3,7 @@
 namespace App\Models;
 
 // Asegúrate de que esta línea esté, si usas Sanctum
-use Laravel\Sanctum\HasApiTokens; 
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,7 +11,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     // Agrega HasApiTokens si estás usando Laravel Sanctum para tu API
-    use HasApiTokens, HasFactory, Notifiable; 
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The table associated with the model.
@@ -19,7 +19,7 @@ class User extends Authenticatable
      *
      * @var string
      */
-    protected $table = 'tbl_usuarios'; 
+    protected $table = 'tblUsuarios';
 
     /**
      * The attributes that are mass assignable.
@@ -28,8 +28,14 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
-        'password',
+        'correo',
+        'contraseña',
+        'teléfono',
+        'dirección',
+        'rol',
+        'estado',
+        'fecha_registro',
+        'fecha_nacimiento',
     ];
 
     /**
@@ -38,7 +44,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
+        'contraseña',
         'remember_token',
     ];
 
@@ -51,7 +57,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'contraseña' => 'hashed',
         ];
     }
 }
