@@ -127,25 +127,124 @@ Si vas a usar el frontend incluido (`Front-end-tienda-`) con Vite, asegúrate de
 VITE_API_URL=http://localhost:8000/api
 ```
 
+### Levantar el servidor backend (desarrollo)
+
+Sigue estos pasos en una terminal PowerShell para arrancar el backend Laravel localmente:
+
+```powershell
+cd c:\Users\daini\Proyectos\tiendaRopa-api
+composer install
+Copy-Item .env.example .env
+# Edita .env si es necesario para configurar DB, APP_URL y otros valores
+php artisan key:generate
+php artisan migrate --seed
+php artisan serve --host=127.0.0.1 --port=8000
+```
+
+Verificación y tips:
+- Asegúrate de que `APP_URL` en `.env` sea `http://127.0.0.1:8000` o la URL que uses.
+- Si hay errores de sintaxis o excepciones, revisa `storage/logs/laravel.log`.
+- Si el servidor requiere HTTPS o una configuración distinta, actualiza `APP_URL` y la configuración de CORS.
+
+
+## Frontend incluido en este repositorio
+
+En este repositorio hay un frontend localizado en `mkdir frontend` (proyecto Vite + React). Para usarlo, sigue estos pasos:
+
+1. Instalar dependencias e iniciar el servidor de desarrollo
+
+```powershell
+cd "c:\Users\daini\Proyectos\tiendaRopa-api\mkdir frontend"
+npm install
+npm run dev
+```
+
+2. Variables de entorno
+
+En la raíz del frontend (`frontend`) puedes crear un `.env` con la siguiente variable (si no existe):
+
+```env
+VITE_API_URL=http://localhost:8000/api
+```
+
+3. Conexión con el backend
+
+- El frontend hace llamadas a la API en la URL definida por `VITE_API_URL`. Asegúrate de que tu backend (Laravel) esté corriendo en `http://localhost:8000` o cambia la URL según tu entorno.
+- CORS: Si tu frontend corre en un puerto distinto (ej. http://localhost:5174), asegúrate de que `config/cors.php` del backend incluya ese origen en `allowed_origins`.
+
+## Probar login (ejemplos)
+
+Credenciales de ejemplo para pruebas (ya presentes en la DB de desarrollo si ejecutaste el seeder):
+- **Correo:** admin@gmail.com
+- **Contraseña:** abc123
+
+1) Con el UI (recomendado)
+
+- Abre la UI en: `http://localhost:5173` o `http://localhost:5174` según el puerto que Vite asigne.
+- Ve a **Login**, introduce `admin@gmail.com` y `abc123`, y pulsa **Entrar**.
+- Verifica en DevTools → `Application` → `Local Storage` que se guardó una clave `token`.
+
+2) Con Postman
+
+- Importa `postman/tiendaRopa-api.postman_collection.json` en Postman.
+- Ajusta `base_url` a `http://localhost:8000`.
+- Haz `POST` a `{{base_url}}/api/login` con body raw JSON (tipo `application/json`):
+
+```json
+{
+    "correo": "admin@gmail.com",
+    "contrasena": "abc123"
+}
+```
+
+- Copia el token de la respuesta y úsalo en `Authorization: Bearer <token>` en las siguientes peticiones.
+
+3) Con PowerShell (curl/Invoke-RestMethod)
+
+```powershell
+$body = @{ correo = 'admin@gmail.com'; contrasena = 'abc123' } | ConvertTo-Json
+$response = Invoke-RestMethod -Method Post -Uri 'http://localhost:8000/api/login' -Body $body -ContentType 'application/json'
+$response | ConvertTo-Json
+$token = $response.token
+
+# Hacer una petición protegida
+Invoke-RestMethod -Method Get -Uri 'http://localhost:8000/api/carritos' -Headers @{ Authorization = "Bearer $token" }
+```
+
+## Troubleshooting y Errores comunes
+
+- **CORS blocked**: Revisa `config/cors.php` y añade el origen exacto del frontend (`http://localhost:5174` o `http://localhost:5173`).
+- **401 Unauthorized**: Asegúrate de enviar el header `Authorization: Bearer <token>` y de que el token no haya vencido. Revisa `localStorage` si el token se guardó.
+- **Errores de sintaxis en el backend**: Revisa `storage/logs/laravel.log` y corrige problemas en `routes/api.php` o controladores si aparecen como `syntax error`.
+- **Token no válido**: Si al recargar la página el token no es válido, `AuthContext` borrará el token y redirigirá al login.
+
+## Notas adicionales
+
+- Se eliminó `frontend-demo` para evitar duplicidades; el frontend activo está en `mkdir frontend`.
+- Si quieres que haga pruebas de login/requests por ti o ejecutar el frontend/backend, dime y lo realizo aquí y comparto resultados.
+
+```
+
 - El servidor de desarrollo de Vite corre por defecto en `http://localhost:5173`. El backend ya tiene `http://localhost:5173` configurado en `config/cors.php`, pero si tu frontend corre en otro host/puerto añade ese origen a `allowed_origins`.
 
 - Para permitir que las peticiones incluyan el token y autenticación, el proyecto usa tokens Bearer (Sanctum en modo token). Asegúrate de haber ejecutado el seeder de administrador y de que las migraciones y seeders estén aplicados.
 
 Ejemplo rápido para levantar ambos servicios (desde dos terminales):
 
-```
-# Backend
-cd tiendaRopa-api
+```powershell
+# Backend (Terminal 1)
+cd c:\Users\daini\Proyectos\tiendaRopa-api
 composer install
-cp .env.example .env
+Copy-Item .env.example .env
 php artisan key:generate
 php artisan migrate --seed
-php artisan serve --port=8000
+php artisan serve --host=127.0.0.1 --port=8000
 
-# Frontend (en otra terminal)
-cd Front-end-tienda-
+# Frontend (en otra terminal, Terminal 2)
+cd "c:\Users\daini\Proyectos\tiendaRopa-api\mkdir frontend"
 npm install
-cp .env.example .env
+Copy-Item .env.example .env
+set-item -path .env -value "VITE_API_URL=http://127.0.0.1:8000/api"
 npm run dev
 ```
 
